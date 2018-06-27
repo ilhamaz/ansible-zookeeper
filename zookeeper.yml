@@ -34,8 +34,6 @@
 
   - name: Start Zookeeper
     shell: "/opt/zookeeper/bin/zkServer.sh start"
-    
-   test
 
 
 
