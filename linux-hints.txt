@@ -1,0 +1,36 @@
+Some hints to do this project
+==============================
+
+ip addr flush eth0
+
+sudo ip addr add 10.102.66.200/24 dev enp0s25
+The ip can then be used to set the link up or down.
+
+ip link set dev enp0s25 up
+ip link set dev enp0s25 down
+
+sudo ip route add default via 10.102.66.1
+
+You also need to edit /etc/ssh/sshd_config, and comment out the following line:
+
+PermitRootLogin without-password
+Just below it, add the following line:
+
+PermitRootLogin yes
+Then restart SSH:
+
+service ssh reload
+
+ssh-copy-id root@192.168.11.103
+
+https://archive.apache.org/dist/zookeeper/zookeeper-3.5.3-beta/zookeeper-3.5.3-beta.tar.gz
+
+timedatectl set-timezone Asia/Baku
+
+apt install openjdk-8-jre-headless
+
+apt install python
+
+ansible -m shell -a "/opt/zookeeper/bin/zkServer.sh stop" all
+
+./zktop.py --servers "node1,node2,node3"
