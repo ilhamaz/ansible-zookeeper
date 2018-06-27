@@ -1,0 +1,39 @@
+---
+- hosts: nodes
+  tasks:
+  - name: Prepare Install folder
+    file: state=directory path=/opt/
+  - name: Download Zookeeper-3.5.3-beta
+    get_url: url=https://archive.apache.org/dist/zookeeper/zookeeper-3.5.3-beta/zookeeper-3.5.3-beta.tar.gz dest=/opt/
+  - name: Extract Zookeeper-3.5.3-beta
+    unarchive: "src=/opt/zookeeper-3.5.3-beta.tar.gz dest=/opt/ remote_src=True"
+  - name: Move to /opt/zookeeper
+    command: creates="/opt/zookeeper" mv /opt/zookeeper-3.5.3-beta /opt/zookeeper
+  - name: Create ZooKeeper data dir
+    file: path=/var/lib/zookeeper/data state=directory
+  - name: Create ZooKeeper datalog dir
+    file: path=/var/lib/zookeeper/datalog state=directory 
+  - name: Create ZooKeeper transactions dir
+    file: path=/var/lib/zookeeper/transactions state=directory
+  - name: Create ZooKeeper logs dir
+    file: path=/var/log/zookeeper state=directory
+  - name: Install the package "openjdk-8-jre-headless"
+    apt:
+      name: openjdk-8-jre-headless
+      state: present
+  - name: Copy hosts file
+    copy: src=lhosts dest=/etc/hosts
+  - name: Copy zoo.cfg
+    copy: src=zoo.cfg dest=/opt/zookeeper/conf/zoo.cfg
+  - name: Copy zktop.py
+    copy: src=zktop.py dest=/opt/zookeeper/bin/zktop.py mode=0755
+  - name: Copy log4j.properties
+    copy: src=log4j.properties dest=/opt/zookeeper/conf/log4j.properties
+  - name: Set myid
+    shell: "echo {{ ansible_hostname }} | tail -c 2 > /var/lib/zookeeper/data/myid"
+
+  - name: Start Zookeeper
+    shell: "/opt/zookeeper/bin/zkServer.sh start"
+
+
+
